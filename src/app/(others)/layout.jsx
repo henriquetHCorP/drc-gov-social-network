@@ -3,6 +3,8 @@ import ".././globals.css";
 import RightSidebar from "@/components/RightSidebar";
 import LeftSidebar from "@/components/LeftSidebar";
 
+import { ClerkProvider, ClerkLoaded, ClerkLoading } from "@clerk/nextjs";
+import Loader from "@/components/Loader";
 const geistSans = localFont({
   src: ".././fonts/GeistVF.woff",
   variable: "--font-geist-sans",
@@ -21,10 +23,16 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
+    <ClerkProvider>
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+        >
+           <ClerkLoading>
+          <Loader />
+        </ClerkLoading>
+        <ClerkLoaded>
+
         <div className="flex justify-between max-w-6xl mx-auto">
           <div className="hidden sm:inline border-r h-screen sticky top-0">
             <LeftSidebar />
@@ -37,7 +45,9 @@ export default function RootLayout({ children }) {
           </div>
 
         </div>
+        </ClerkLoaded>
       </body>
     </html>
+        </ClerkProvider>
   );
 }
