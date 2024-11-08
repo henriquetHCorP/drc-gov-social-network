@@ -1,13 +1,11 @@
-
 import { Webhook } from 'svix';
 import { headers } from 'next/headers';
 import { clerkClient } from '@clerk/nextjs/server';
-import { createOrUpdateUser, deleteUser } from '../../../lib/actions/user';
+import { createOrUpdateUser, deleteUser } from '@/lib/actions/user';
 
 export async function POST(req) {
   // You can find this in the Clerk Dashboard -> Webhooks -> choose the endpoint
   const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET;
-  console.log('webhook:', WEBHOOK_SECRET); 
 
   if (!WEBHOOK_SECRET) {
     throw new Error(
@@ -59,23 +57,20 @@ export async function POST(req) {
   console.log('Webhook body:', body);
 
   if (eventType === 'user.created' || eventType === 'user.updated') {
-    const { id, first_name, last_name, image_url, email_addresses, username} =
+    const { id, first_name, last_name, image_url, email_addresses, username } =
       evt?.data;
-
-      console.log(locked,":locked"); 
     try {
       const user = await createOrUpdateUser(
-        id, 
+        id,
         first_name,
         last_name,
         image_url,
         email_addresses,
-        username,
+        username
       );
       if (user && eventType === 'user.created') {
         try {
           await clerkClient.users.updateUserMetadata(id, {
-            // here we only update the id, so id above here is the id coming from clerk which will be updated to the user._id coming from mongodb to be updated inside clerk; 
             publicMetadata: {
               userMongoId: user._id,
             },
@@ -94,7 +89,6 @@ export async function POST(req) {
 
   if (eventType === 'user.deleted') {
     const { id } = evt?.data;
-    // the id above here is coming from the clerk event==> user.created 
     try {
       await deleteUser(id);
     } catch (error) {
