@@ -1,10 +1,17 @@
 import localFont from "next/font/local";
 import ".././globals.css";
-import RightSidebar from "@/components/RightSidebar";
-import LeftSidebar from "@/components/LeftSidebar";
+// import RightSidebar from "@/components/RightSidebar";
+// import LeftSidebar from "@/components/LeftSidebar";
+
+import LeftSidebar from "../../components/LeftSidebar";
+import RightSidebar from "../../components/RightSidebar";
+
 
 import { ClerkProvider, ClerkLoaded, ClerkLoading } from "@clerk/nextjs";
-import Loader from "@/components/Loader";
+// import Loader from "@/components/Loader";
+
+import Loader from "../../components/Loader";
+
 const geistSans = localFont({
   src: ".././fonts/GeistVF.woff",
   variable: "--font-geist-sans",
